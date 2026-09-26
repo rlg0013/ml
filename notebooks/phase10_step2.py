@@ -48,6 +48,8 @@ print("=" * 80)
 print("PHASE 10 (STEP 2): S2 CHEAP BLOCKING RETRIEVAL BENCHMARK")
 print("=" * 80)
 
+t0_start = time.time()
+
 print(f"\nProject directory: {PROJECT_DIR}")
 print(f"S1: {S1_PATH}")
 print(f"S2: {S2_PATH}")
