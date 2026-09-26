@@ -212,6 +212,138 @@ Interpretation:
 - first-token blocking recovers substantially more but is too broad
 - a lexical retrieval method is needed between these extremes
 
+## Phase 10 Step 3 — Character n-gram TF-IDF Retriever result
+
+Configuration:
+- analyzer: `char_wb`
+- ngram_range: `(3, 4)`
+- max_features: 50,000 (fitted on S1 fast-dev slice)
+- vocabulary size: 25,912
+- country partitioned (US vs US, India vs India)
+- similarity lower bound: 0.40
+- runtime: 3.76 minutes across all 5,034,616 S2 records in 250k chunks
+
+Recall & Candidate Size Metrics:
+- **Top-10**:
+  - Link Recall: 65.00%
+  - All-Match Entity Recall: 53.95%
+  - At-Least-1 Recall: 74.83%
+  - Mean Candidates/S1: 10.00 | Median: 10 | Max: 10
+- **Top-25**:
+  - Link Recall: 71.08%
+  - All-Match Entity Recall: 60.38%
+  - At-Least-1 Recall: 79.70%
+  - Mean Candidates/S1: 24.98 | Median: 25 | Max: 25
+- **Top-50**:
+  - Link Recall: 74.58%
+  - All-Match Entity Recall: 64.10%
+  - At-Least-1 Recall: 82.76%
+  - Mean Candidates/S1: 49.82 | Median: 50 | Max: 50
+  - Reduction Ratio: 99.9990%
+
+Artifacts Saved:
+- Results: `output/phase10_step3_char_tfidf_results.tsv`
+- Candidates: `output/phase10_step3_char_tfidf_top50.tsv`
+- Vectorizer: `models/phase10_step3_char_tfidf_vectorizer.joblib`
+- Config: `output/phase10_step3_char_tfidf_config.json`
+
+Key Takeaways:
+- Top-50 Character TF-IDF achieves **74.58% Link Recall** (beating First-Token Cheap Blocking at 73.06%) while slashing average candidate count by **51x** (from 2,567.76 down to 49.82).
+- Zero OOM issues with `sparse_dot_topn` (elapsed time under 4 minutes on 5M records).
+- All-match entity recall jumped from 59.19% to 64.10%.
+
+## Phase 10 Step 4 — Word / Token TF-IDF Retriever result
+
+Configuration:
+- analyzer: `word`
+- ngram_range: `(1, 2)` (unigrams + bigrams)
+- max_features: 50,000 (fitted on S1 fast-dev slice)
+- vocabulary size: 19,023
+- country partitioned (US vs US, India vs India)
+- similarity lower bound: 0.35
+- runtime: 1.76 minutes across all 5,034,616 S2 records in 250k chunks
+
+Recall & Candidate Size Metrics (Standalone Word TF-IDF):
+- **Top-10**:
+  - Link Recall: 41.18%
+  - All-Match Entity Recall: 29.11%
+  - At-Least-1 Recall: 53.21%
+  - Mean Candidates/S1: 9.96 | Median: 10 | Max: 10
+- **Top-25**:
+  - Link Recall: 47.53%
+  - All-Match Entity Recall: 34.53%
+  - At-Least-1 Recall: 59.64%
+  - Mean Candidates/S1: 24.89 | Median: 25 | Max: 25
+- **Top-50**:
+  - Link Recall: 52.76%
+  - All-Match Entity Recall: 39.31%
+  - At-Least-1 Recall: 64.73%
+  - Mean Candidates/S1: 49.76 | Median: 50 | Max: 50
+
+### Cumulative Multi-Channel Union (Char Top-50 ∪ Word Top-50)
+- **Link Recall: 76.7857%** (up from 74.5764%, a **+2.21% absolute recall lift**)
+- **All-Match Entity Recall: 66.8712%** (up from 64.1040%, a **+2.77% absolute lift**)
+- **At-Least-1 Recall: 84.2998%** (up from 82.7622%, a **+1.54% absolute lift**)
+- **Mean Candidates / S1: 84.74** | Median: 88 | P90: 98 | P99: 100 | Max: 100
+- **Reduction Ratio: 99.9983%** (collapsing 5,034,616 S2 down to ~85 candidates/S1)
+
+Artifacts Saved:
+- Results: `output/phase10_step4_word_tfidf_results.tsv`
+- Candidates: `output/phase10_step4_word_tfidf_top50.tsv`
+- Cumulative Union: `output/phase10_step4_cumulative_union_results.tsv`
+- Vectorizer: `models/phase10_step4_word_tfidf_vectorizer.joblib`
+- Config: `output/phase10_step4_word_tfidf_config.json`
+
+Key Takeaways:
+- Word TF-IDF alone has lower recall (52.76%) than Char TF-IDF (74.58%) due to spelling typos and abbreviations, but it captures **orthogonal token permutations and distinctive word associations** that character n-grams miss.
+- Combining both channels pushes Link Recall to **76.79%** and All-Match Recall to **66.87%**, while keeping candidate sets compact (mean 84.74 candidates per query).
+
+## Phase 10 Step 5 — Address TF-IDF Retriever & 3-Channel Union
+
+Configuration:
+- analyzer: `word`
+- ngram_range: `(1, 2)` (unigrams + bigrams)
+- max_features: 50,000 (fitted on S1 fast-dev slice addresses)
+- vocabulary size: 47,199
+- country partitioned (US vs US, India vs India)
+- similarity lower bound: 0.40
+- runtime: 2.09 minutes across all 5,034,616 S2 records in 250k chunks
+
+Recall & Candidate Size Metrics (Standalone Address TF-IDF):
+- **Top-10**:
+  - Link Recall: 70.10%
+  - All-Match Entity Recall: 60.24%
+  - At-Least-1 Recall: 79.02%
+  - Mean Candidates/S1: 9.98 | Median: 10 | Max: 10
+- **Top-20**:
+  - Link Recall: 74.82%
+  - All-Match Entity Recall: 65.80%
+  - At-Least-1 Recall: 82.70%
+  - Mean Candidates/S1: 19.85 | Median: 20 | Max: 20
+- **Top-30**:
+  - Link Recall: 77.26%
+  - All-Match Entity Recall: 68.68%
+  - At-Least-1 Recall: 84.61%
+  - Mean Candidates/S1: 29.58 | Median: 30 | Max: 30
+
+### Complete 3-Channel Cumulative Union (Char50 ∪ Word50 ∪ Addr30)
+- **Link Recall: 94.8505%** (Astronomical **+18.06% absolute lift** over Name Char+Word Union)
+- **All-Match Entity Recall: 91.5879%** (Massive **+24.72% absolute lift** over Name Union)
+- **At-Least-1 Recall: 97.1293%** (Up from 84.30%)
+- **Mean Candidates / S1: 113.09** | Median: 116 | P90: 127 | P99: 130 | Max: 130
+- **Reduction Ratio: 99.9978%** (From 5,034,616 down to ~113 candidates per S1)
+
+Artifacts Saved:
+- Results: `output/phase10_step5_address_tfidf_results.tsv`
+- Candidates: `output/phase10_step5_address_tfidf_top30.tsv`
+- 3-Channel Union: `output/phase10_step5_cumulative_union_results.tsv`
+- Vectorizer: `models/phase10_step5_address_tfidf_vectorizer.joblib`
+- Config: `output/phase10_step5_address_tfidf_config.json`
+
+Key Takeaways:
+- Empirically validated the core hypothesis: Address TF-IDF acts as an indispensable candidate bridge for transliterated (English <-> Hindi) pairs, brand reorganizations, and legal subsidiary variations where company names differ but physical locations, building names, and numbers match.
+- Achieved a **94.85% true-match link recall ceiling** while preserving extreme compactness (only ~113 candidates per S1 query).
+
 ## Architecture principles to preserve
 
 - candidate generation sets the recall ceiling

@@ -1,0 +1,4 @@
+Channel	Link Recall (%)	All-Match Entity Recall (%)	At-Least-1 Recall (%)	Mean Cands / S1	Median Cands	P90 Cands	P99 Cands	Max Cands	Reduction Ratio (%)
+Channel 3: Word TF-IDF (Top-10)	41.1849	29.1112	53.2143	9.96	10	10	10	10	99.9998
+Channel 3: Word TF-IDF (Top-25)	47.5310	34.5285	59.6382	24.89	25	25	25	25	99.9995
+Channel 3: Word TF-IDF (Top-50)	52.7592	39.3068	64.7268	49.76	50	50	50	50	99.9990

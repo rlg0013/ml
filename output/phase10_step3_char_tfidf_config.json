@@ -1,0 +1,22 @@
+{
+  "phase": "10_step3",
+  "method": "character_n_gram_tfidf",
+  "analyzer": "char_wb",
+  "ngram_range": [
+    3,
+    4
+  ],
+  "min_df": 2,
+  "max_features": 50000,
+  "sublinear_tf": true,
+  "dtype": "float32",
+  "top_k": 50,
+  "similarity_lower_bound": 0.4,
+  "chunk_size": 250000,
+  "fast_dev_size": 50000,
+  "random_seed": 42,
+  "fit_corpus": "50k fast-dev S1 names",
+  "country_partitioned": true,
+  "country_partition_is_generic": true,
+  "s2_total_rows": 5034616
+}

@@ -1,0 +1,21 @@
+{
+  "phase": "10_step4",
+  "method": "word_tfidf",
+  "analyzer": "word",
+  "ngram_range": [
+    1,
+    2
+  ],
+  "min_df": 2,
+  "max_features": 50000,
+  "sublinear_tf": true,
+  "dtype": "float32",
+  "norm": "l2",
+  "lowercase": false,
+  "top_k": 50,
+  "similarity_lower_bound": 0.35,
+  "chunk_size": 250000,
+  "fast_dev_size": 50000,
+  "country_partitioned": true,
+  "step3_union_file": "C:\\Users\\abhid\\Desktop\\MLchallenge\\output\\phase10_step3_char_tfidf_top50.tsv"
+}

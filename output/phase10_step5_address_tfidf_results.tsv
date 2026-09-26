@@ -1,0 +1,4 @@
+Channel	Link Recall (%)	All-Match Entity Recall (%)	At-Least-1 Recall (%)	Mean Cands / S1	Median Cands	P90 Cands	P99 Cands	Max Cands	Reduction Ratio (%)
+Channel 4: Address TF-IDF (Top-10)	70.0992	60.2427	79.0204	9.98	10	10	10	10	99.9998
+Channel 4: Address TF-IDF (Top-20)	74.8152	65.7979	82.7047	19.85	20	20	20	20	99.9996
+Channel 4: Address TF-IDF (Top-30)	77.2633	68.6823	84.6101	29.58	30	30	30	30	99.9994

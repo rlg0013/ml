@@ -1,0 +1,4 @@
+Channel	Link Recall (%)	All-Match Entity Recall (%)	At-Least-1 Recall (%)	Mean Cands / S1	Median Cands	P90 Cands	P99 Cands	Max Cands
+Channel 2: Char TF-IDF (Top-10)	64.9999	53.9452	74.8259	10.0	10	10	10	10
+Channel 2: Char TF-IDF (Top-25)	71.0821	60.3829	79.6962	24.98	25	25	25	25
+Channel 2: Char TF-IDF (Top-50)	74.5764	64.104	82.7622	49.82	50	50	50	50
