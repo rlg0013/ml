@@ -1,0 +1,4 @@
+ChannelLink Recall (%)All-Match Entity Recall (%)At-Least-1 Recall (%)Mean Cands / S1Median CandsP90 CandsP99 CandsMax CandsReduction Ratio (%)
+Key A: (Country, Exact Norm Name)21.45%10.90%34.52%4.69169122399.9999%
+Key B: (Country, First Token)73.06%59.19%83.39%2567.768607395133304035299.9490%
+Key A ? Key B (Cheap Blocking)73.06%59.19%83.39%2567.768607395133304035299.9490%
